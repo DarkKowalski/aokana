@@ -17,6 +17,10 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.100
+      - name: Release Name
+        id: release_name
+        run: |
+          echo "::set-env name=RELEASE_NAME::$(git branch --show-current)"
       - name: Build
         run: dotnet build --configuration Release
       - name: Publish
@@ -35,8 +39,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.head_ref }}
-          release_name: ${{ github.head_ref }}
+          tag_name: ${{ env.RELEASE_NAME }}
+          release_name: ${{ env.RELEASE_NAME}}
           draft: false
           prerelease: false
       - name: Upload Release Asset
