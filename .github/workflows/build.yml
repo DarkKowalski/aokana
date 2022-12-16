@@ -4,37 +4,23 @@ on:
   push:
     branches:
       - master
-      - release/v*
   pull_request:
     branches:
       - master
-      - release/v*
 
 jobs:
   build:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [windows-latest, ubuntu-latest, macos-latest]
+        os: [windows-latest, ubuntu-latest, macOS-latest]
         configuration: [Debug, Release]
+
     steps:
       - uses: actions/checkout@v2
       - name: Setup .NET Core
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.100
-      - name: Build with dotnet
+      - name: Build
         run: dotnet build --configuration ${{ matrix.configuration }}
-      - name: Publish with dotnet
-        if: matrix.configuration == 'Release'
-        run: dotnet publish --configuration ${{ matrix.configuration }} --output ./publish
-      - name: Upload Release Asset
-        if: matrix.configuration == 'Release'
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ./publish
-          asset_name: ${{ github.event.release.tag_name }}-${{ matrix.os }}-${{ matrix.configuration }}
-          asset_content_type: application/zip
