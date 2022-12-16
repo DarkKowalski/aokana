@@ -106,7 +106,7 @@ namespace Aokana
                 foreach (string file in files)
                 {
                     totalFiles += 1;
-                    totalExtractedFiles += extractor.ExtractAll(file, options.InputPath);
+                    totalExtractedFiles += extractor.ExtractAll(file, options.OutputPath);
                 }
             }
             else
