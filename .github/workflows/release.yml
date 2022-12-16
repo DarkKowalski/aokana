@@ -20,7 +20,7 @@ jobs:
       - name: Release Name
         id: release_name
         run: |
-          echo "::set-env name=RELEASE_NAME::$(git branch --show-current)"
+          echo "RELEASE_NAME=$(git branch --show-current)" >> $GITHUB_ENV
       - name: Build
         run: dotnet build --configuration Release
       - name: Publish
